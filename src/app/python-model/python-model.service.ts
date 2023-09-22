@@ -15,4 +15,8 @@ export class PythonModelService {
   getMessage(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/hello`);
   }
+
+  generateImage(): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/generate_image`, { responseType: 'blob' });
+  }
 }

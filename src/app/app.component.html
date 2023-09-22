@@ -1,4 +1,7 @@
 <app-nav-bar></app-nav-bar>
-<!-- THIS IS JUST A TEST FOR PYTHON CONNECTION. REMOVE THIS AFTER. -->
-<button class="bg-white" (click)="getMessage()">print console message</button>
+<!-- THIS DIV BLOCK IS JUST A TEST FOR PYTHON CONNECTION. MIGRATE THIS TO PREVIEW PAGE AFTER. -->
+<div>
+<button class="bg-white" (click)="generateImage()">Generate Image</button>
+<img *ngIf="imageUrl" [src]="imageUrl" alt="Generated Image">
+</div>
 <router-outlet></router-outlet>
