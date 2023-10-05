@@ -48,4 +48,11 @@
       </div>
     </div>
   </div>
+
+  <!-- test image after file is sent to python to generate point cloud preview -->
+  <!-- TODO: possibly migrate this block to a separate preview page -->
+  <div *ngIf="imageUrl">
+    <p class="text-white">Preview:</p>
+    <img [src]="imageUrl" alt="Preview Image">
   </div>
+</div>

@@ -1,10 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpEventType, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Component } from '@angular/core';
 import { FileUploadService } from './file-upload.service';
 import { SnackbarService } from '../snackbar/snackbar.service';
+import { PythonModelService } from '../python-model/python-model.service';
 import { FileUpload } from '../models/file-upload';
-import { AngularFireList } from '@angular/fire/compat/database';
 
 @Component({
   selector: 'app-file-upload',
@@ -13,12 +11,12 @@ import { AngularFireList } from '@angular/fire/compat/database';
 })
 export class FileUploadComponent {
 
-  // Declaring variables
   currentFile?: File;
   progress = 0;
   fileName = 'Select File';
+  imageUrl: any; // for preview
 
-  constructor(private fileUploadService: FileUploadService, private snackBarService: SnackbarService) { }
+  constructor(private fileUploadService: FileUploadService, private snackBarService: SnackbarService, private pythonModelService: PythonModelService) { }
 
   // Getting file details and dividing into variables
   selectFile(event: any): void {
@@ -35,6 +33,22 @@ export class FileUploadComponent {
   // Uploading file to firebase
   upload(): void {
     if (this.currentFile) {
+
+        // 1. generate preview of point cloud model using PYTHON service
+        this.pythonModelService.generateModelPreview(this.currentFile).subscribe(
+          data => {
+            try {
+              this.imageUrl = URL.createObjectURL(data);
+            } catch (error) {
+              console.error("Failed to create image:", error);
+            }
+          },
+          error => {
+            console.error("HTTP Request Error:", error);
+          }
+        );
+
+        // 2. after preview generation, pass in the file and preview thumbnail to FIREBASE
         const currentFileUpload = new FileUpload(this.currentFile);
         this.fileUploadService.uploadFile(currentFileUpload).subscribe(
           percentage => {
